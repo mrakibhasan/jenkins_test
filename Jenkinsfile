@@ -54,9 +54,3 @@ pipeline {
                     }
     }
 }
-white_check_mark
-eyes
-raised_hands
-React
-Reply
-
