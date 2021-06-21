@@ -1,18 +1,14 @@
 pipeline {
     agent any
+    triggers {
+        cron("*/2 * * * *")
+    }
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "MVN3"
         jdk "JDK1.8"
     }
     stages {
-        stage('enable webhook') {
-            steps {
-                script {
-                    properties([pipelineTriggers([githubPush()])])
-                }
-            }
-        }
         stage('pullscm') {
             steps {
                 git credentialsId: 'github', url: 'git@github.com:sathishbob/jenkins_test.git'
@@ -40,7 +36,7 @@ pipeline {
                     cest = TimeZone.getTimeZone("CEST")
                     def cest = new Date()
                     println(cest) 
-                    def mailRecipients = 'rakibulcse05@gmail.com'
+                    def mailRecipients = 'sathishbob@gmail.com'
                     def jobName = currentBuild.fullDisplayName
                     env.Name = Name
                     env.cest = cest
