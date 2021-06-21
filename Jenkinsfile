@@ -1,14 +1,12 @@
 pipeline {
-    agent {
-        label 'linux'
-    }
+    agent any
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "MVN3"
         jdk "JDK1.8"
     }
     stages {
-        stage ("Enable Webhook") {
+        stage('enable webhook') {
             steps {
                 script {
                     properties([pipelineTriggers([githubPush()])])
@@ -23,9 +21,9 @@ pipeline {
         stage('Build') {
             steps {
                 // Run Maven on a Unix agent.
-                sh "mvn -Dmaven.test.failure.ignore=true -f api-gateway/ clean package"
+                sh "mvn -Dmaven.test.failure.ignore=true -f api-gateway clean package"
                 // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                //bat "mvn -Dmaven.test.failure.ignore=true -f api-gateway clean package"
             }
             post {
                 // If Maven was able to run the tests, even if some of the test
@@ -36,5 +34,29 @@ pipeline {
                 }
             }
         }
+          stage('Email') {
+            steps{
+                script {
+                    cest = TimeZone.getTimeZone("CEST")
+                    def cest = new Date()
+                    println(cest) 
+                    def mailRecipients = 'rakibulcse05@gmail.com'
+                    def jobName = currentBuild.fullDisplayName
+                    env.Name = Name
+                    env.cest = cest
+                    emailext body: '''${SCRIPT, template="email-html.template"}''',
+                    mimeType: 'text/html',
+                    subject: "[Jenkins] ${jobName}",
+                    to: "${mailRecipients}",
+                    replyTo: "${mailRecipients}"
+                           }
+                        }
+                    }
     }
 }
+white_check_mark
+eyes
+raised_hands
+React
+Reply
+
